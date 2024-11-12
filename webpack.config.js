@@ -1,57 +1,57 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const { DefinePlugin } = require('webpack');
-const { warn } = require('console');
-require('dotenv').config();
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const { DefinePlugin } = require('webpack')
 
-const mode = process.env.NODE_ENV;
-const isDev = mode === 'development';
+require('dotenv').config()
+
+const mode = process.env.NODE_ENV
+const isDev = mode === 'development'
 
 const plugins = [
 	new DefinePlugin({
-		'process.env': JSON.stringify(process.env)
+		'process.env': JSON.stringify(process.env),
 	}),
 	new CleanWebpackPlugin(),
 	new HtmlWebpackPlugin({
 		template: 'index.html',
 		minify: {
 			collapseWhitespace: !isDev,
-			removeComments: !isDev
-		}
+			removeComments: !isDev,
+		},
 	}),
 	new MiniCssExtractPlugin({
-		filename: isDev ? '[name].css' : '[name].[hash].css',
-		chunkFilename: isDev ? '[id].css' : '[id].[hash].css'
-	})
-];
+		filename: isDev ? '[name].css' : '[name].[contenthash].css',
+		chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
+	}),
+]
 
 module.exports = {
 	context: path.resolve(__dirname, 'src'),
 	mode,
 	entry: './index.js',
 	output: {
-		filename: isDev ? '[name].js' : '[name].[hash].js',
+		filename: isDev ? '[name].js' : '[name].[contenthash].js',
 		path: path.resolve(__dirname, 'dist'),
-		assetModuleFilename: 'public/[name].[contenthash][ext][query]'
+		assetModuleFilename: 'public/[name].[contenthash][ext][query]',
 	},
 	resolve: {
 		extensions: ['.js'],
 		alias: {
-			'@': path.resolve(__dirname, 'src/')
-		}
+			'@': path.resolve(__dirname, 'src/'),
+		},
 	},
 	devtool: isDev ? 'source-map' : false,
 	devServer: {
 		port: 7777,
 		hot: true,
-		historyApiFallback: true,
 		static: {
-			directory: path.join(__dirname, 'public')
-		}
+			directory: path.join(__dirname, 'public'),
+		},
+		historyApiFallback: true,
 	},
 	optimization: {
 		minimize: !isDev,
@@ -61,33 +61,28 @@ module.exports = {
 				parallel: true,
 				terserOptions: {
 					format: {
-						comments: false
-					}
-				}
-			})
-		]
+						comments: false,
+					},
+				},
+			}),
+		],
 	},
 	plugins,
-	stats: {
-		warningsFilter: [
-			'./~/css-loader!./~/postcss-loader!./src/components/Navigator/Navigator.css'
-		]
-	},
 	module: {
 		rules: [
 			{
 				test: /\.html$/i,
-				loader: 'html-loader'
+				loader: 'html-loader',
 			},
 			{
-				test: /\.js$/i,
+				test: /\.js$/,
 				exclude: /node_modules/,
 				use: {
 					loader: 'babel-loader',
 					options: {
-						presets: ['@babel/preset-env']
-					}
-				}
+						presets: ['@babel/preset-env'],
+					},
+				},
 			},
 			{
 				test: /\.module\.s[ac]ss$/i,
@@ -97,17 +92,17 @@ module.exports = {
 						loader: 'css-loader',
 						options: {
 							modules: {
-								localIdentName: '[local]__[hash:base64:7]'
-							}
-						}
+								localIdentName: '[local]_[hash:base64:7]',
+							},
+						},
 					},
 					{
 						loader: 'sass-loader',
 						options: {
-							sourceMap: true
-						}
-					}
-				]
+							sourceMap: true,
+						},
+					},
+				],
 			},
 			{
 				test: /^((?!\.module).)*s[ac]ss$/i,
@@ -117,10 +112,10 @@ module.exports = {
 					{
 						loader: 'sass-loader',
 						options: {
-							sourceMap: true
-						}
-					}
-				]
+							sourceMap: true,
+						},
+					},
+				],
 			},
 			{
 				test: /\.css$/i,
@@ -128,16 +123,16 @@ module.exports = {
 					'style-loader',
 					'css-loader',
 					{
-						loader: 'sass-loader',
+						loader: 'postcss-loader',
 						options: {
-							sourceMap: true
-						}
-					}
-				]
+							sourceMap: true,
+						},
+					},
+				],
 			},
 			{
 				test: /\.(png|svg|jpg|jpeg|gif)$/i,
-				type: 'asset/resource'
+				type: 'asset/resource',
 			},
 			{
 				test: /\.m?js$/,
@@ -145,10 +140,10 @@ module.exports = {
 				use: {
 					loader: 'babel-loader',
 					options: {
-						presets: ['@babel/preset-env']
-					}
-				}
-			}
-		]
-	}
-};
+						presets: ['@babel/preset-env'],
+					},
+				},
+			},
+		],
+	},
+}

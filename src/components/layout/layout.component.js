@@ -1,9 +1,22 @@
 export class Layout {
-  constructor(children) {
-    this.children = children
-  }
+	constructor({ router, children }) {
+		this.router = router;
+		this.children = children;
+	}
 
-  render() {
-    return ``
-  }
+	render() {
+    const headerHTML = `<header>
+    Header
+    <nav>
+    <a href="/">Home</a>
+    <a href="/auth">Auth</a>
+    </nav>
+    </header>`
+
+    return `
+      ${headerHTML}
+      <main>
+        ${this.children}
+      </main>`
+	}
 }

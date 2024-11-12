@@ -1,4 +1,9 @@
-export class Auth {
+import { BaseScreen } from '../base-screen/BaseScreen';
+
+export class Auth extends BaseScreen {
+	constructor() {
+		super('Auth');
+	}
 
 	render() {
 		return `

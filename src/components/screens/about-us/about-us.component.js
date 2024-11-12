@@ -1,4 +1,9 @@
-export class AboutUs {
+import { BaseScreen } from '../base-screen/BaseScreen';
+
+export class AboutUs extends BaseScreen {
+	constructor() {
+		super('About us');
+	}
 
 	render() {
 		return `
