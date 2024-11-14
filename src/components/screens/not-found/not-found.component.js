@@ -1,8 +1,8 @@
-import { BaseScreen } from '../base-screen/BaseScreen';
+import { BaseScreen } from "@/core/component/base-screen.component";
 
 export class NotFound extends BaseScreen {
 	constructor() {
-		super('Not found');
+		super({title: 'Not found'});
 	}
 
 	render() {
